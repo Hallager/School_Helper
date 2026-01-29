@@ -37,7 +37,10 @@
     <div v-if="showOverlay" id="overlay">
       <h1>{{ titleText }}</h1>
       <p v-html="infoText"></p>
-      <button @click="startGame">Start Spil</button>
+      <div class="overlay-actions">
+        <button class="nav-btn btn-primary" @click="startGame">Start Spil ▶️</button>
+        <button class="nav-btn btn-secondary" @click="$router.push('/')">↩️ Tilbage</button>
+      </div>
     </div>
 
     <!-- Confetti -->

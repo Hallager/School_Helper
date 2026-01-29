@@ -23,6 +23,7 @@
              </button>
            </div>
         </div>
+        <button class="nav-btn btn-secondary" @click="$router.push('/')" style="margin-top: 20px; width: 100%;">↩️ Tilbage</button>
       </div>
     </div>
 
@@ -77,7 +78,10 @@
         <div style="font-size: 4rem; margin: 10px;">🎈</div>
         <p>Du fangede alle ballonerne!</p>
         <p>Din tid: <span>{{ timerSeconds }}</span> sekunder.</p>
-        <button class="btn-main" @click="startGame">Spil Igen</button>
+        <div class="end-actions" style="display: flex; flex-direction: column; gap: 10px; align-items: center; margin-top: 20px;">
+          <button class="nav-btn btn-primary" @click="startGame" style="width: 100%;">Spil Igen 🔄</button>
+          <button class="nav-btn btn-secondary" @click="$router.push('/')" style="width: 100%;">Tilbage til Forsiden 🏠</button>
+        </div>
       </div>
     </div>
 

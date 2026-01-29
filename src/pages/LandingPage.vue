@@ -1,7 +1,7 @@
 <template>
   <div class="landing-container">
     <header class="header">
-      <h1 class="bounce-title">🏫 School Helper 🎒</h1>
+      <h1 class="bounce-title">🏫 Lær & Leg 🎒</h1>
       <p class="subtitle">Velkommen! Vælg et sjovt spil at spille 👇</p>
     </header>
 

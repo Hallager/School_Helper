@@ -19,13 +19,13 @@
         </button>
       </div>
       
-      <button class="back-btn" @click="$router.push('/')">Tilbage</button>
+      <button class="nav-btn back-btn" @click="$router.push('/')">↩️ Tilbage</button>
     </div>
 
     <!-- GAME AREA -->
     <div v-else class="game-area">
       <div class="header">
-        <button class="icon-btn" @click="gameState = 'start'">❌</button>
+        <button class="nav-btn back-btn" @click="gameState = 'start'" style="padding: 10px; width: 50px; height: 50px; border-radius: 50%;">❌</button>
         <div class="score">⭐ {{ score }} / 10</div>
       </div>
 
@@ -504,15 +504,7 @@ const getConfettiStyle = () => {
 .theme-icon { font-size: 3rem; }
 .theme-name { font-weight: 600; color: #444; }
 
-.back-btn {
-    padding: 10px 20px;
-    border: none;
-    background: #ccc;
-    border-radius: 50px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 1rem;
-}
+/* .back-btn styles removed and handled by global App.vue styles */
 
 /* --- GAME AREA --- */
 .game-area {

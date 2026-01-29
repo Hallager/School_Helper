@@ -70,7 +70,10 @@
         </div>
       </div>
 
-      <button class="big-btn" @click="startGame">Start Spillet ▶️</button>
+      <div class="start-actions" style="display: flex; flex-direction: column; gap: 10px; align-items: center; margin-top: 20px;">
+        <button class="nav-btn btn-primary" @click="startGame" style="width: 100%;">Start Spillet ▶️</button>
+        <button class="nav-btn btn-secondary" @click="$router.push('/')" style="width: 100%;">↩️ Tilbage</button>
+      </div>
     </div>
 
     <!-- Game Screen -->
@@ -124,7 +127,10 @@
     <div v-if="gameState === 'ended'" id="endScreen">
       <h1>Flot klaret! 🏁</h1>
       <p>Du fik <span style="color:var(--primary-color); font-size:2rem; font-weight:bold;">{{ score }}/{{ totalRounds }}</span> rigtige.</p>
-      <button class="big-btn" @click="resetGame">Spil Igen 🔄</button>
+      <div class="end-actions" style="display: flex; flex-direction: column; gap: 10px; align-items: center; margin-top: 20px;">
+        <button class="nav-btn btn-primary" @click="resetGame" style="width: 100%;">Spil Igen 🔄</button>
+        <button class="nav-btn btn-secondary" @click="$router.push('/')" style="width: 100%;">Gå til Forsiden 🏠</button>
+      </div>
     </div>
 
   </div>

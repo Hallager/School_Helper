@@ -8,7 +8,10 @@
       <div class="highscore-box">
         🏆 Bedste Score: <span>{{ bestScoreDisplay }}</span>
       </div>
-      <button class="btn-main" @click="startGame">Start Spil</button>
+      <div class="start-actions">
+        <button class="nav-btn btn-primary" @click="startGame">Start Spil ▶️</button>
+        <button class="nav-btn btn-secondary" @click="$router.push('/')">↩️ Tilbage</button>
+      </div>
       
       <div class="range-selector">
         <p>Vælg talområde:</p>
@@ -61,7 +64,10 @@
       <p>Du gættede rigtigt <span>{{ accuracy }}</span>% af gangene.</p>
       <p>Din tid: <span>{{ timerSeconds }}</span> sekunder.</p>
       <p>Forkerte gæt: <span>{{ wrongGuesses }}</span></p>
-      <button class="btn-main" @click="resetGame">Spil Igen</button>
+      <div class="end-actions" style="display: flex; flex-direction: column; gap: 10px; align-items: center;">
+        <button class="nav-btn btn-primary" @click="resetGame" style="width: 200px;">Spil Igen 🔄</button>
+        <button class="nav-btn btn-secondary" @click="$router.push('/')" style="width: 200px;">Tilbage 🏠</button>
+      </div>
     </div>
 
     <!-- Confetti Overlay -->

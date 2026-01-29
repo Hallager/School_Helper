@@ -1,7 +1,7 @@
 <template>
   <div class="zoo-container">
     <div class="header">
-      <button class="icon-btn" @click="$router.push('/')">❌</button>
+      <button class="nav-btn back-btn" @click="$router.push('/')" style="padding: 10px; width: 50px; height: 50px; border-radius: 50%;">❌</button>
       <h1 class="game-title">🦁 Zoo Fodring 🍎</h1>
       <div class="header-stats">
         <div class="round-indicator">Runde: {{ roundsPlayed }} / {{ MAX_ROUNDS }}</div>
@@ -221,8 +221,8 @@
           <span>Din Score:</span>
           <span>⭐ {{ score }}</span>
         </div>
-        <button class="btn-main-zoo" @click="resetGame">Spil Igen 🔄</button>
-        <button class="btn-secondary-zoo" @click="$router.push('/')">Tilbage til Forsiden 🏠</button>
+        <button class="nav-btn btn-primary" @click="resetGame" style="width: 100%; margin-bottom: 10px;">Spil Igen 🔄</button>
+        <button class="nav-btn btn-secondary" @click="$router.push('/')" style="width: 100%;">Tilbage til Forsiden 🏠</button>
       </div>
     </div>
   </div>
@@ -646,15 +646,7 @@ onMounted(() => {
   margin: 0;
 }
 
-.icon-btn {
-  background: #ff8b94;
-  border: none;
-  font-size: 1.5rem;
-  border-radius: 50%;
-  width: 50px; height: 50px;
-  cursor: pointer;
-  box-shadow: 0 4px 0 #d96e76;
-}
+/* icon-btn styles removed and handled by global App.vue styles */
 
 .score {
   font-size: 1.5rem;

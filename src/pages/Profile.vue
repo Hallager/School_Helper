@@ -1,7 +1,7 @@
 <template>
   <div class="profile-container">
     <header class="header">
-      <button class="back-btn" @click="$router.push('/')">← Tilbage</button>
+      <button class="nav-btn back-btn" @click="$router.push('/')">↩️ Tilbage</button>
       <h1>Min Profil</h1>
     </header>
 
@@ -168,19 +168,7 @@ const getScoreUnit = (game) => {
   margin-bottom: 30px;
 }
 
-.back-btn {
-  background: #eee;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: all 0.2s;
-}
-
-.back-btn:hover {
-  background: #ddd;
-}
+/* .back-btn styles removed and handled by global App.vue styles */
 
 h1 {
   color: #333;
