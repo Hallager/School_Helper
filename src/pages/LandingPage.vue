@@ -15,7 +15,7 @@
         <button class="profile-link-btn" @click="$router.push('/profil')">📈 Se Resultater</button>
       </div>
       <div v-else class="no-user-badge" @click="showUserSelect = !showUserSelect">
-        <span>Vælg eller opret en profil venligst 👤</span>
+        <span>Vælg eller opret en profil 👤</span>
       </div>
 
       <div v-if="showUserSelect" class="user-dropdown card-shadow">
@@ -50,14 +50,24 @@
         v-for="game in orderedGames" 
         :key="game.id"
         class="game-card" 
-        :class="[game.class, { 'is-dragging': draggingId === game.id }]"
+        :class="[
+          game.class, 
+          { 
+            'is-dragging': draggingId === game.id,
+            'is-locked': !currentUser,
+            'shake-animation': shakeGameId === game.id
+          }
+        ]"
         :draggable="!!currentUser"
-        @click="handleGameClick(game.route)"
+        @click="handleGameClick(game)"
         @dragstart="handleGameDragStart($event, game.id)"
         @dragover.prevent="handleGameDragOver($event, game.id)"
         @drop="handleGameDrop"
         @dragend="handleGameDragEnd"
       >
+        <div class="lock-overlay" v-if="!currentUser">
+          <span class="lock-icon">🔒</span>
+        </div>
         <div class="emoji">{{ game.emoji }}</div>
         <h2>{{ game.title }}</h2>
         <p>{{ game.description }}</p>
@@ -99,9 +109,24 @@ const orderedGames = computed(() => {
   });
 });
 
-const handleGameClick = (route) => {
+const shakeGameId = ref(null);
+
+const handleGameClick = (game) => {
   if (draggingId.value) return; // Forhindre klik under træk
-  router.push(route);
+  
+  if (!currentUser.value) {
+    // Ryst kortet for at vise det er låst
+    shakeGameId.value = game.id;
+    setTimeout(() => {
+      shakeGameId.value = null;
+    }, 500);
+    
+    // Åben bruger-vælgeren for at hjælpe brugeren
+    showUserSelect.value = true;
+    return;
+  }
+  
+  router.push(game.route);
 };
 
 const draggingId = ref(null);
@@ -479,4 +504,49 @@ const confirmDelete = (user) => {
 .card-shadow {
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
+
+/* Låst tilstand */
+.is-locked {
+  filter: grayscale(0.5) opacity(0.8);
+  cursor: not-allowed !important;
+}
+
+.lock-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  border-radius: 25px;
+}
+
+.lock-icon {
+  font-size: 3rem;
+  background: rgba(255, 255, 255, 0.8);
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.shake-animation {
+  animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+  border-color: #FF6B6B !important;
+}
+
+@keyframes shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+  40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+
 </style>
