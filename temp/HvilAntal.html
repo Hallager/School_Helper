@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Det Sjove Tælle Spil med Lyd</title>
+    <style>
+        :root {
+            --primary-color: #6C5CE7;
+            --secondary-color: #00CEC9;
+            --bg-color: #dfe6e9;
+            --card-bg: #ffffff;
+            --correct-color: #00b894;
+            --wrong-color: #d63031;
+            --table-color: #2d3436;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Verdana', sans-serif;
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            user-select: none;
+        }
+
+        .game-container {
+            background-color: var(--card-bg);
+            width: 95%;
+            max-width: 650px;
+            padding: 20px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            text-align: center;
+            position: relative;
+        }
+
+        /* Lyd knap øverst til højre */
+        .sound-toggle {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #f1f2f6;
+            border: none;
+            font-size: 1.5rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .sound-toggle:hover { background: #dfe6e9; }
+
+        h1 { color: var(--primary-color); margin: 5px 0 15px 0; font-size: 2rem; }
+        h3 { margin: 10px 0 5px 0; color: #636e72; font-size: 1rem; }
+
+        /* --- EMOJI PICKER --- */
+        .emoji-picker { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .emoji-btn {
+            background: #f1f2f6; border: 2px solid transparent; font-size: 2rem;
+            cursor: pointer; border-radius: 50%; width: 50px; height: 50px;
+            display: flex; align-items: center; justify-content: center;
+            transition: transform 0.2s;
+        }
+        .emoji-btn:hover { transform: scale(1.2); }
+        .emoji-btn.selected {
+            background: #fff; border-color: var(--primary-color);
+            box-shadow: 0 0 10px rgba(108, 92, 231, 0.5); transform: scale(1.1);
+        }
+
+        /* --- PRESETS --- */
+        .preset-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        .preset-btn {
+            background: white; border: 3px solid #dfe6e9; border-radius: 15px; padding: 10px;
+            cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; align-items: center;
+        }
+        .preset-btn:hover { border-color: var(--secondary-color); transform: translateY(-2px); }
+        .preset-btn.active { border-color: var(--primary-color); background-color: #f0f3ff; box-shadow: 0 4px 0 #a29bfe; }
+        .preset-icon { font-size: 1.8rem; }
+        .preset-text { font-size: 0.9rem; font-weight: bold; }
+
+        .custom-settings { max-height: 0; overflow: hidden; transition: max-height 0.4s; background: #f1f2f6; border-radius: 15px; text-align: left; }
+        .custom-settings.open { max-height: 400px; padding: 15px; border: 2px solid #dfe6e9; }
+        .settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .setting-group { display: flex; flex-direction: column; }
+        input[type="number"], select { padding: 8px; border-radius: 8px; border: 2px solid #b2bec3; width: 100%; box-sizing: border-box;}
+
+        /* --- SPILLE BORDET --- */
+        .dice-table {
+            background-color: var(--table-color); border-radius: 20px; padding: 20px; min-height: 180px;
+            display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 15px;
+            margin: 15px 0; box-shadow: inset 0 0 20px rgba(0,0,0,0.5); border: 5px solid #636e72;
+            transition: background-color 0.3s;
+        }
+
+        .die {
+            width: 75px; height: 75px; background-color: #fff; border-radius: 14px;
+            box-shadow: 0 4px 0 #b2bec3, 0 5px 15px rgba(0,0,0,0.4);
+            display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr);
+            padding: 4px; position: relative;
+        }
+        .dot-cell { display: flex; justify-content: center; align-items: center; }
+        .emoji-dot { font-size: 18px; line-height: 1; }
+
+        .random-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; width: 100%; }
+        .random-item { font-size: 2.5rem; animation: popIn 0.3s; padding: 5px; }
+
+        /* --- SVAR KNAPPER --- */
+        .options-container { display: flex; justify-content: space-around; gap: 10px; margin-top: 20px; }
+        .option-btn {
+            background-color: var(--primary-color); color: white; border: none;
+            border-radius: 15px; padding: 10px 0; font-size: 2rem; font-weight: bold;
+            cursor: pointer; width: 80px; box-shadow: 0 6px 0 #4834d4; transition: transform 0.1s;
+        }
+        .option-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #4834d4; }
+        .option-btn.correct { background-color: var(--correct-color); box-shadow: 0 6px 0 #00896f; animation: bounce 0.5s; pointer-events: none; }
+        .option-btn.wrong { background-color: var(--wrong-color); box-shadow: 0 6px 0 #b71c1c; animation: shake 0.4s; opacity: 0.6; pointer-events: none; }
+
+        .big-btn {
+            background-color: var(--correct-color); color: white; font-size: 1.5rem;
+            padding: 15px; border: none; border-radius: 15px; cursor: pointer;
+            box-shadow: 0 6px 0 #00896f; width: 100%; margin-top: 15px; font-weight: bold;
+        }
+        .big-btn:hover { filter: brightness(1.1); }
+
+        .hidden { display: none !important; }
+        .status-bar { display: flex; justify-content: space-between; font-weight: bold; color: #636e72; margin-bottom: 5px; font-size: 1.1rem;}
+        .timer-container { background: #eee; height: 10px; border-radius: 5px; margin-bottom: 10px; display: none; }
+        .timer-bar { height: 100%; background: var(--secondary-color); width: 100%; border-radius: 5px; transition: width 0.05s linear; }
+
+        @keyframes popIn { 0% { transform: scale(0); } 80% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        @keyframes bounce { 0%, 100% {transform: translateY(0);} 50% {transform: translateY(-15px);} }
+        @keyframes shake { 0%, 100% {transform: translateX(0);} 25% {transform: translateX(-5px);} 75% {transform: translateX(5px);} }
+    </style>
+</head>
+<body>
+
+<div class="game-container">
+    <button class="sound-toggle" id="soundBtn" onclick="toggleSound()">🔊</button>
+
+    <div id="startScreen">
+        <h1>🎲 Tælle Spil</h1>
+        
+        <h3>Vælg din figur:</h3>
+        <div class="emoji-picker" id="emojiPicker">
+            <div class="emoji-btn selected" onclick="selectEmoji('⚫', this)">⚫</div>
+            <div class="emoji-btn" onclick="selectEmoji('⭐', this)">⭐</div>
+            <div class="emoji-btn" onclick="selectEmoji('⚽', this)">⚽</div>
+            <div class="emoji-btn" onclick="selectEmoji('🍎', this)">🍎</div>
+            <div class="emoji-btn" onclick="selectEmoji('🦄', this)">🦄</div>
+            <div class="emoji-btn" onclick="selectEmoji('🦖', this)">🦖</div>
+        </div>
+
+        <h3>Sværhedsgrad:</h3>
+        <div class="preset-container">
+            <div class="preset-btn active" onclick="setPreset('easy', this)">
+                <span class="preset-icon">🐣</span>
+                <span class="preset-text">Let (1-6)</span>
+            </div>
+            <div class="preset-btn" onclick="setPreset('medium', this)">
+                <span class="preset-icon">🐇</span>
+                <span class="preset-text">Mellem (2-12)</span>
+            </div>
+            <div class="preset-btn" onclick="setPreset('hard', this)">
+                <span class="preset-icon">🐆</span>
+                <span class="preset-text">Svær (5-18)</span>
+            </div>
+            <div class="preset-btn" onclick="toggleCustom(this)">
+                <span class="preset-icon">🛠️</span>
+                <span class="preset-text">Indstil Selv</span>
+            </div>
+        </div>
+
+        <div id="customSettings" class="custom-settings">
+            <div class="settings-grid">
+                <div class="setting-group"><label>Min antal:</label><input type="number" id="minVal" value="1"></div>
+                <div class="setting-group"><label>Max antal:</label><input type="number" id="maxVal" value="6"></div>
+                <div class="setting-group"><label>Tid (sek):</label><input type="number" id="timeVal" value="0"></div>
+                <div class="setting-group"><label>Type:</label>
+                    <select id="typeVal">
+                        <option value="dice">🎲 Terninger</option>
+                        <option value="random">✨ Rodet</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <button class="big-btn" onclick="startGame()">Start Spillet ▶️</button>
+    </div>
+
+    <div id="gameScreen" class="hidden">
+        <div class="status-bar">
+            <span>Runde: <span id="roundDisp">1</span>/10</span>
+            <span>Point: <span id="scoreDisp">0</span></span>
+        </div>
+        
+        <div id="timerContainer" class="timer-container"><div id="timerBar" class="timer-bar"></div></div>
+
+        <div id="tableArea" class="dice-table"></div>
+        <div id="optionsArea" class="options-container"></div>
+    </div>
+
+    <div id="endScreen" class="hidden">
+        <h1>Flot klaret! 🏁</h1>
+        <p>Du fik <span id="finalScore" style="color:var(--primary-color); font-size:2rem; font-weight:bold;"></span> rigtige.</p>
+        <button class="big-btn" onclick="location.reload()">Spil Igen 🔄</button>
+    </div>
+</div>
+
+<script>
+    // --- SETUP ---
+    const TOTAL_ROUNDS = 10;
+    let state = { round: 0, score: 0, currentTarget: 0, active: false, timer: null, config: {}, emoji: '⚫', soundOn: true };
+    
+    // Inputs
+    const minIn = document.getElementById('minVal');
+    const maxIn = document.getElementById('maxVal');
+    const timeIn = document.getElementById('timeVal');
+    const typeIn = document.getElementById('typeVal');
+
+    // --- LYD SYSTEM (WEB AUDIO API) ---
+    // Dette genererer lyde direkte i browseren uden mp3 filer
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    let audioCtx;
+
+    function initAudio() {
+        if (!audioCtx) audioCtx = new AudioContext();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+    }
+
+    function toggleSound() {
+        state.soundOn = !state.soundOn;
+        const btn = document.getElementById('soundBtn');
+        btn.innerText = state.soundOn ? "🔊" : "🔇";
+    }
+
+    function playTone(freq, type, duration, startTime = 0) {
+        if (!state.soundOn || !audioCtx) return;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type; // sine, square, sawtooth, triangle
+        osc.frequency.value = freq;
+        
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        
+        osc.start(audioCtx.currentTime + startTime);
+        
+        // Gør lyden blødere i enden (fade out)
+        gain.gain.setValueAtTime(0.1, audioCtx.currentTime + startTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + startTime + duration);
+        
+        osc.stop(audioCtx.currentTime + startTime + duration);
+    }
+
+    // Specifikke Lydeffekter
+    const sfx = {
+        click: () => playTone(800, 'sine', 0.1),
+        select: () => playTone(600, 'triangle', 0.05),
+        correct: () => {
+            // Ding-ding (To toner: C og E)
+            playTone(523.25, 'sine', 0.3, 0);   // C5
+            playTone(659.25, 'sine', 0.4, 0.1); // E5
+        },
+        wrong: () => {
+            // Buzz (lav savtak)
+            playTone(150, 'sawtooth', 0.3, 0);
+            playTone(130, 'sawtooth', 0.3, 0.15);
+        },
+        win: () => {
+            // Fanfare
+            let now = 0;
+            [523, 659, 783, 1046].forEach((f, i) => {
+                playTone(f, 'square', 0.2, now);
+                now += 0.15;
+            });
+        }
+    }
+
+    // --- MENU LOGIK ---
+    function selectEmoji(char, btn) {
+        initAudio(); // Aktivér lyd ved første klik
+        sfx.select();
+        state.emoji = char;
+        document.querySelectorAll('.emoji-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+    }
+
+    function setPreset(level, btn) {
+        initAudio(); 
+        sfx.select();
+        document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('customSettings').classList.remove('open');
+
+        if(level === 'easy') { minIn.value=1; maxIn.value=6; timeIn.value=0; typeIn.value='dice'; }
+        if(level === 'medium') { minIn.value=2; maxIn.value=12; timeIn.value=15; typeIn.value='dice'; }
+        if(level === 'hard') { minIn.value=5; maxIn.value=18; timeIn.value=10; typeIn.value='random'; }
+    }
+
+    function toggleCustom(btn) {
+        sfx.select();
+        document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('customSettings').classList.add('open');
+    }
+
+    function startGame() {
+        initAudio();
+        sfx.click();
+        
+        state.config = {
+            min: parseInt(minIn.value),
+            max: parseInt(maxIn.value),
+            time: parseInt(timeIn.value),
+            type: typeIn.value
+        };
+        
+        if(state.config.min > state.config.max) state.config.max = state.config.min;
+
+        state.round = 0; state.score = 0;
+        document.getElementById('startScreen').classList.add('hidden');
+        document.getElementById('gameScreen').classList.remove('hidden');
+        document.getElementById('timerContainer').style.display = state.config.time > 0 ? 'block' : 'none';
+        
+        nextRound();
+    }
+
+    function nextRound() {
+        if(state.round >= TOTAL_ROUNDS) { endGame(); return; }
+        
+        state.round++;
+        state.active = true;
+        document.getElementById('roundDisp').innerText = state.round;
+        document.getElementById('scoreDisp').innerText = state.score;
+        document.getElementById('tableArea').innerHTML = '';
+        document.getElementById('optionsArea').innerHTML = '';
+        document.getElementById('tableArea').style.backgroundColor = '#2d3436';
+
+        const range = state.config.max - state.config.min + 1;
+        state.currentTarget = Math.floor(Math.random() * range) + state.config.min;
+
+        if(state.config.type === 'dice') createDice(state.currentTarget);
+        else createRandom(state.currentTarget);
+
+        createButtons();
+        if(state.config.time > 0) startTimer();
+    }
+
+    // --- GRAFIK ---
+    function createDice(number) {
+        const table = document.getElementById('tableArea');
+        table.style.backgroundColor = '#2d3436';
+        let diceCount = Math.ceil(number / 6);
+        let diceValues = new Array(diceCount).fill(1); 
+        let remainingPoints = number - diceCount;
+
+        while (remainingPoints > 0) {
+            let r = Math.floor(Math.random() * diceCount);
+            if (diceValues[r] < 6) { diceValues[r]++; remainingPoints--; }
+        }
+
+        diceValues.forEach(val => {
+            const die = document.createElement('div');
+            die.className = 'die';
+            die.style.animation = 'popIn 0.5s';
+            
+            const dotsMap = { 1:[4], 2:[2,6], 3:[2,4,6], 4:[0,2,6,8], 5:[0,2,4,6,8], 6:[0,2,3,5,6,8] };
+            const activeDots = dotsMap[val] || [];
+            
+            for(let i=0; i<9; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'dot-cell';
+                if(activeDots.includes(i)) {
+                    const span = document.createElement('span');
+                    span.className = 'emoji-dot';
+                    span.innerText = state.emoji; 
+                    cell.appendChild(span);
+                }
+                die.appendChild(cell);
+            }
+            table.appendChild(die);
+        });
+    }
+
+    function createRandom(number) {
+        const table = document.getElementById('tableArea');
+        table.style.backgroundColor = '#a29bfe'; 
+        const container = document.createElement('div');
+        container.className = 'random-container';
+        for(let i=0; i<number; i++) {
+            const item = document.createElement('div');
+            item.className = 'random-item';
+            item.innerText = state.emoji;
+            container.appendChild(item);
+        }
+        table.appendChild(container);
+    }
+
+    function createButtons() {
+        const container = document.getElementById('optionsArea');
+        let opts = [state.currentTarget];
+        while(opts.length < 3) {
+            let offset = Math.floor(Math.random() * 5) - 2;
+            let wrong = state.currentTarget + offset;
+            if(wrong > 0 && !opts.includes(wrong)) opts.push(wrong);
+            else {
+                let r = Math.floor(Math.random() * 10) + 1;
+                if(!opts.includes(r)) opts.push(r);
+            }
+        }
+        opts.sort(() => Math.random() - 0.5);
+
+        opts.forEach(num => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = num;
+            btn.onclick = () => handleGuess(num, btn);
+            container.appendChild(btn);
+        });
+    }
+
+    // --- GAMEPLAY ---
+    function handleGuess(guess, btn) {
+        if(!state.active) return;
+
+        if(guess === state.currentTarget) {
+            sfx.correct(); // LYD: RIGTIGT
+            state.active = false;
+            clearInterval(state.timer);
+            btn.classList.add('correct');
+            state.score++;
+            document.getElementById('scoreDisp').innerText = state.score;
+            setTimeout(nextRound, 1200);
+        } else {
+            sfx.wrong(); // LYD: FORKERT
+            btn.classList.add('wrong');
+            if(state.config.time > 0) failRound();
+        }
+    }
+
+    function failRound() {
+        sfx.wrong();
+        state.active = false;
+        clearInterval(state.timer);
+        document.getElementById('tableArea').style.backgroundColor = '#d63031';
+        document.querySelectorAll('.option-btn').forEach(b => {
+            if(parseInt(b.innerText) === state.currentTarget) b.classList.add('correct');
+            else b.style.opacity = 0.3;
+        });
+        setTimeout(nextRound, 2000);
+    }
+
+    function startTimer() {
+        const bar = document.getElementById('timerBar');
+        bar.style.width = '100%';
+        bar.style.backgroundColor = 'var(--secondary-color)';
+        let timeLeft = state.config.time * 1000;
+        const total = timeLeft;
+        if(state.timer) clearInterval(state.timer);
+        state.timer = setInterval(() => {
+            timeLeft -= 50;
+            const pct = (timeLeft / total) * 100;
+            bar.style.width = pct + '%';
+            if(pct < 30) bar.style.backgroundColor = '#fdcb6e';
+            if(pct < 15) bar.style.backgroundColor = '#d63031';
+            if(timeLeft <= 0) failRound();
+        }, 50);
+    }
+
+    function endGame() {
+        sfx.win(); // LYD: VINDER MELODI
+        document.getElementById('gameScreen').classList.add('hidden');
+        document.getElementById('endScreen').classList.remove('hidden');
+        document.getElementById('finalScore').innerText = state.score + "/" + TOTAL_ROUNDS;
+    }
+</script>
+
+</body>
+</html>

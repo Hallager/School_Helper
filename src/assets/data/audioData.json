@@ -1,0 +1,224 @@
+[
+    {
+        "tal": 1,
+        "tekst": "en",
+        "start": 2.18,
+        "slut": 2.57
+    },
+    {
+        "tal": 2,
+        "tekst": "to",
+        "start": 4.00,
+        "slut": 4.32
+    },
+    {
+        "tal": 3,
+        "tekst": "tre",
+        "start": 5.61,
+        "slut": 6.04
+    },
+    {
+        "tal": 4,
+        "tekst": "fire",
+        "start": 7.40,
+        "slut": 8.00
+    },
+    {
+        "tal": 5,
+        "tekst": "fem",
+        "start": 9.57,
+        "slut": 9.89
+    },
+    {
+        "tal": 6,
+        "tekst": "seks",
+        "start": 11.36,
+        "slut": 11.90
+    },
+    {
+        "tal": 7,
+        "tekst": "syv",
+        "start": 13.09,
+        "slut": 13.54
+    },
+    {
+        "tal": 8,
+        "tekst": "otte",
+        "start": 15.00,
+        "slut": 15.53
+    },
+    {
+        "tal": 9,
+        "tekst": "ni",
+        "start": 16.70,
+        "slut": 17.20
+    },
+    {
+        "tal": 10,
+        "tekst": "ti",
+        "start": 18.52,
+        "slut": 19.00
+    },
+    {
+        "tal": 11,
+        "tekst": "elleve",
+        "start": 20.34,
+        "slut": 21.00
+    },
+    {
+        "tal": 12,
+        "tekst": "tolv",
+        "start": 22.40,
+        "slut": 22.85
+    },
+    {
+        "tal": 13,
+        "tekst": "tretten",
+        "start": 24.25,
+        "slut": 24.90
+    },
+    {
+        "tal": 14,
+        "tekst": "fjorten",
+        "start": 26.25,
+        "slut": 26.90
+    },
+    {
+        "tal": 15,
+        "tekst": "femten",
+        "start": 28.27,
+        "slut": 29.00
+    },
+    {
+        "tal": 16,
+        "tekst": "seksten",
+        "start": 30.17,
+        "slut": 31.00
+    },
+    {
+        "tal": 17,
+        "tekst": "sytten",
+        "start": 32.17,
+        "slut": 32.90
+    },
+    {
+        "tal": 18,
+        "tekst": "atten",
+        "start": 34.17,
+        "slut": 34.90
+    },
+    {
+        "tal": 19,
+        "tekst": "nitten",
+        "start": 36.00,
+        "slut": 36.70
+    },
+    {
+        "tal": 20,
+        "tekst": "tyve",
+        "start": 38.00,
+        "slut": 38.70
+    },
+    {
+        "tal": 21,
+        "tekst": "enogtyve",
+        "start": 40.00,
+        "slut": 41.00
+    },
+    {
+        "tal": 22,
+        "tekst": "toogtyve",
+        "start": 42.25,
+        "slut": 43.42
+    },
+    {
+        "tal": 23,
+        "tekst": "treogtyve",
+        "start": 44.46,
+        "slut": 45.81
+    },
+    {
+        "tal": 24,
+        "tekst": "fireogtyve",
+        "start": 46.77,
+        "slut": 48.25
+    },
+    {
+        "tal": 25,
+        "tekst": "femogtyve",
+        "start": 48.90,
+        "slut": 50.30
+    },
+    {
+        "tal": 26,
+        "tekst": "seksogtyve",
+        "start": 51.30,
+        "slut": 52.70
+    },
+    {
+        "tal": 27,
+        "tekst": "syvogtyve",
+        "start": 53.70,
+        "slut": 55.00
+    },
+    {
+        "tal": 28,
+        "tekst": "otteogtyve",
+        "start": 56.20,
+        "slut": 57.50
+    },
+    {
+        "tal": 29,
+        "tekst": "niogtyve",
+        "start": 58.60,
+        "slut": 60.00
+    },
+    {
+        "tal": 30,
+        "tekst": "tredive",
+        "start": 61.20,
+        "slut": 62.40
+    },
+    {
+        "tal": 40,
+        "tekst": "fyrre",
+        "start": 63.60,
+        "slut": 64.60
+    },
+    {
+        "tal": 50,
+        "tekst": "halvtreds",
+        "start": 65.30,
+        "slut": 66.45
+    },
+    {
+        "tal": 60,
+        "tekst": "tres",
+        "start": 67.90,
+        "slut": 68.50
+    },
+    {
+        "tal": 70,
+        "tekst": "halvfjerds",
+        "start": 70.10,
+        "slut": 71.10
+    },
+    {
+        "tal": 80,
+        "tekst": "firs",
+        "start": 72.50,
+        "slut": 73.40
+    },
+    {
+        "tal": 90,
+        "tekst": "halvfems",
+        "start": 74.60,
+        "slut": 75.60
+    },
+    {
+        "tal": 100,
+        "tekst": "hundrede",
+        "start": 76.90,
+        "slut": 77.60
+    }
+]

@@ -1,0 +1,272 @@
+[
+  {
+    "id": "id_0_taler_på_dansk",
+    "tekst": "taler på dansk",
+    "start": 0.0,
+    "slut": 0.956
+  },
+  {
+    "id": "id_1_flot",
+    "tekst": "Flot!",
+    "start": 1.843,
+    "slut": 2.22
+  },
+  {
+    "id": "id_2_rigtigt",
+    "tekst": "Rigtigt!",
+    "start": 2.588,
+    "slut": 3.08
+  },
+  {
+    "id": "id_3_sådan",
+    "tekst": "Sådan!",
+    "start": 3.35,
+    "slut": 3.90
+  },
+  {
+    "id": "id_4_godt_klaret",
+    "tekst": "Godt klaret!",
+    "start": 4.214,
+    "slut": 4.978
+  },
+  {
+    "id": "id_5_jubii",
+    "tekst": "Jubii!",
+    "start": 5.20,
+    "slut": 6.14
+  },
+  {
+    "id": "id_6_super",
+    "tekst": "Super!",
+    "start": 6.14,
+    "slut": 7.05
+  },
+  {
+    "id": "id_7_hvor_er_du_god",
+    "tekst": "Hvor er du god!",
+    "start": 7.26,
+    "slut": 8.00
+  },
+  {
+    "id": "id_8_fantastisk",
+    "tekst": "Fantastisk!",
+    "start": 8.60,
+    "slut": 10.10
+  },
+  {
+    "id": "id_9_prøv_igen",
+    "tekst": "Prøv igen.",
+    "start": 10.15,
+    "slut": 10.85
+  },
+  {
+    "id": "id_10_hov,_det_var_ikke_den",
+    "tekst": "Hov, det var ikke den.",
+    "start": 12.675,
+    "slut": 13.276
+  },
+  {
+    "id": "id_11_kom_igen",
+    "tekst": "Kom igen.",
+    "start": 13.9,
+    "slut": 14.429
+  },
+  {
+    "id": "id_12_næsten",
+    "tekst": "Næsten.",
+    "start": 15.376,
+    "slut": 16.177
+  },
+  {
+    "id": "id_13_prøv_en_gang_til",
+    "tekst": "Prøv en gang til.",
+    "start": 16.83,
+    "slut": 17.855
+  },
+  {
+    "id": "id_14_led_videre",
+    "tekst": "Led videre.",
+    "start": 19.129,
+    "slut": 19.917
+  },
+  {
+    "id": "id_15_find_ti",
+    "tekst": "Find ti.",
+    "start": 20.435,
+    "slut": 21.083
+  },
+  {
+    "id": "id_16_find_tyve",
+    "tekst": "Find tyve.",
+    "start": 21.859,
+    "slut": 22.594
+  },
+  {
+    "id": "id_17_find_tredive",
+    "tekst": "Find tredive.",
+    "start": 23.329,
+    "slut": 24.155
+  },
+  {
+    "id": "id_18_find_fyrre",
+    "tekst": "Find fyrre.",
+    "start": 24.903,
+    "slut": 25.738
+  },
+  {
+    "id": "id_19_find_halvtreds",
+    "tekst": "Find halvtreds.",
+    "start": 26.429,
+    "slut": 27.435
+  },
+  {
+    "id": "id_20_find_tres",
+    "tekst": "Find tres.",
+    "start": 28.203,
+    "slut": 28.992
+  },
+  {
+    "id": "id_21_find_halvfjerds",
+    "tekst": "Find halvfjerds.",
+    "start": 29.788,
+    "slut": 30.788
+  },
+  {
+    "id": "id_22_find_firs",
+    "tekst": "Find firs.",
+    "start": 31.743,
+    "slut": 32.632
+  },
+  {
+    "id": "id_23_find_halvfems",
+    "tekst": "Find halvfems.",
+    "start": 33.62,
+    "slut": 34.576
+  },
+  {
+    "id": "id_24_find_hundrede",
+    "tekst": "Find hundrede.",
+    "start": 35.671,
+    "slut": 36.594
+  },
+  {
+    "id": "id_25_hvor_er_ti",
+    "tekst": "Hvor er ti?",
+    "start": 37.716,
+    "slut": 38.535
+  },
+  {
+    "id": "id_26_kan_du_se_tyve",
+    "tekst": "Kan du se tyve?",
+    "start": 39.567,
+    "slut": 40.565
+  },
+  {
+    "id": "id_27_hvor_gemmer_tredive_sig",
+    "tekst": "Hvor gemmer tredive sig?",
+    "start": 41.778,
+    "slut": 43.06
+  },
+  {
+    "id": "id_28_kan_du_finde_fyrre",
+    "tekst": "Kan du finde fyrre?",
+    "start": 44.354,
+    "slut": 45.409
+  },
+  {
+    "id": "id_29_ser_du_halvtreds",
+    "tekst": "Ser du halvtreds?",
+    "start": 46.887,
+    "slut": 47.988
+  },
+  {
+    "id": "id_30_hvor_er_tres",
+    "tekst": "Hvor er tres?",
+    "start": 49.252,
+    "slut": 50.221
+  },
+  {
+    "id": "id_31_kan_du_se_halvfjerds",
+    "tekst": "Kan du se halvfjerds?",
+    "start": 51.713,
+    "slut": 53.043
+  },
+  {
+    "id": "id_32_hvor_gemmer_firs_sig",
+    "tekst": "Hvor gemmer firs sig?",
+    "start": 54.364,
+    "slut": 55.57
+  },
+  {
+    "id": "id_33_ser_du_halvfems",
+    "tekst": "Ser du halvfems?",
+    "start": 57.225,
+    "slut": 58.293
+  },
+  {
+    "id": "id_34_kan_du_finde_hundrede",
+    "tekst": "Kan du finde hundrede?",
+    "start": 59.571,
+    "slut": 60.722
+  },
+  {
+    "id": "id_35_tryk_på_ti",
+    "tekst": "Tryk på ti.",
+    "start": 62.062,
+    "slut": 62.905
+  },
+  {
+    "id": "id_36_fang_tyve",
+    "tekst": "Fang tyve.",
+    "start": 63.714,
+    "slut": 64.523
+  },
+  {
+    "id": "id_37_se_efter_tredive",
+    "tekst": "Se efter tredive.",
+    "start": 65.338,
+    "slut": 66.427
+  },
+  {
+    "id": "id_38_snup_fyrre",
+    "tekst": "Snup fyrre.",
+    "start": 67.141,
+    "slut": 68.076
+  },
+  {
+    "id": "id_39_tag_halvtreds",
+    "tekst": "Tag halvtreds.",
+    "start": 68.929,
+    "slut": 69.959
+  },
+  {
+    "id": "id_40_se_efter_tres",
+    "tekst": "Se efter tres.",
+    "start": 70.926,
+    "slut": 71.966
+  },
+  {
+    "id": "id_41_klik_på_halvfjerds",
+    "tekst": "Klik på halvfjerds.",
+    "start": 73.208,
+    "slut": 74.449
+  },
+  {
+    "id": "id_42_fang_firs",
+    "tekst": "Fang firs.",
+    "start": 75.12,
+    "slut": 76.13
+  },
+  {
+    "id": "id_43_tryk_på_halvfems",
+    "tekst": "Tryk på halvfems.",
+    "start": 76.00,
+    "slut": 78.29
+  },
+  {
+    "id": "id_44_tag_hundrede",
+    "tekst": "Tag hundrede.",
+    "start": 79.00,
+    "slut": 80.20
+  }
+]

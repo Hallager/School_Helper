@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Det Sjove Talspil</title>
+    <style>
+        /* --- CSS STYLES --- */
+        :root {
+            --primary: #4A90E2;
+            --accent: #FFD700;
+            --success: #2ECC71;
+            --error: #E74C3C;
+            --bg: #F0F4F8;
+            --text: #333;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Verdana', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+        }
+
+        h1 { margin-top: 0; color: var(--primary); }
+        
+        /* Header Stats */
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #555;
+        }
+
+        /* Spil Område */
+        #game-area { display: none; }
+        
+        .progress {
+            margin-bottom: 20px;
+            background: #eee;
+            height: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background: var(--success);
+            width: 0%;
+            transition: width 0.5s;
+        }
+
+        .speaker-btn {
+            background: var(--primary);
+            border: none;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            cursor: pointer;
+            margin: 20px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            color: white;
+            box-shadow: 0 5px 15px rgba(74, 144, 226, 0.4);
+            transition: transform 0.2s;
+            animation: pulse 2s infinite;
+        }
+        
+        .speaker-btn:active { transform: scale(0.9); }
+
+        .choices {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .number-card {
+            background: white;
+            border: 3px solid var(--primary);
+            width: 80px;
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            border-radius: 15px;
+            cursor: pointer;
+            box-shadow: 0 5px 0 var(--primary);
+            transition: transform 0.1s, box-shadow 0.1s;
+            user-select: none;
+        }
+
+        .number-card:active {
+            transform: translateY(5px);
+            box-shadow: 0 0 0 var(--primary);
+        }
+
+        /* Animationer */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .shake { animation: shake 0.5s; background-color: var(--error) !important; color: white; border-color: var(--error) !important; box-shadow: 0 5px 0 #c0392b !important; }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .pop { animation: pop 0.4s; background-color: var(--success) !important; color: white; border-color: var(--success) !important; box-shadow: 0 5px 0 #27ae60 !important; }
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        /* Start & Slut Skærm */
+        .btn-main {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 0 #219150;
+            font-family: inherit;
+            margin-top: 20px;
+        }
+        .btn-main:active { transform: translateY(5px); box-shadow: 0 0 0 #219150; }
+
+        .highscore-box {
+            background: #fff8e1;
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border: 2px dashed var(--accent);
+        }
+
+        /* Emoji overlay for victory */
+        #confetti {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            display: none;
+            font-size: 50px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="start-screen">
+        <h1>🔢 Talspillet</h1>
+        <p>Lyt til tallet og tryk på den rigtige knap!</p>
+        <p>Kan du klare 10 runder?</p>
+        <div class="highscore-box">
+            🏆 Bedste Score: <span id="best-score">-</span>
+        </div>
+        <button class="btn-main" onclick="startGame()">Start Spil</button>
+    </div>
+
+    <div id="game-area">
+        <div class="stats-bar">
+            <span>Tid: <span id="timer">0</span>s</span>
+            <span>Runde: <span id="round-display">1</span>/10</span>
+        </div>
+        
+        <div class="progress">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+
+        <button class="speaker-btn" onclick="speakCurrentNumber()">
+            🔊
+        </button>
+        <p>Tryk på højtaleren for at høre tallet igen</p>
+
+        <div class="choices" id="choices-container">
+            </div>
+    </div>
+
+    <div id="end-screen" style="display: none;">
+        <h1>🎉 Flot klaret!</h1>
+        <div style="font-size: 4rem; margin: 20px;">⭐</div>
+        <p>Du gættede rigtigt <span id="final-accuracy">100</span>% af gangene.</p>
+        <p>Din tid: <span id="final-time">0</span> sekunder.</p>
+        <p>Forkerte gæt: <span id="final-wrongs">0</span></p>
+        <button class="btn-main" onclick="location.reload()">Spil Igen</button>
+    </div>
+</div>
+
+<div id="confetti"></div>
+
+<script>
+    /* --- JAVASCRIPT LOGIC --- */
+    
+    // Spillets variabler
+    let currentRound = 0;
+    const totalRounds = 10;
+    let targetNumber = 0;
+    let wrongGuesses = 0;
+    let correctClicks = 0;
+    let totalClicks = 0;
+    let startTime;
+    let timerInterval;
+    let timerSeconds = 0;
+    
+    // Hent highscore ved start
+    const savedScore = localStorage.getItem('mathGameBestTime');
+    document.getElementById('best-score').innerText = savedScore ? savedScore + "s" : "Ingen endnu";
+
+    // Start spillet
+    function startGame() {
+        document.getElementById('start-screen').style.display = 'none';
+        document.getElementById('game-area').style.display = 'block';
+        
+        currentRound = 0;
+        wrongGuesses = 0;
+        correctClicks = 0;
+        totalClicks = 0;
+        timerSeconds = 0;
+        
+        // Start timer
+        startTime = Date.now();
+        timerInterval = setInterval(() => {
+            timerSeconds = Math.floor((Date.now() - startTime) / 1000);
+            document.getElementById('timer').innerText = timerSeconds;
+        }, 1000);
+
+        nextRound();
+    }
+
+    // Kør næste runde
+    function nextRound() {
+        if (currentRound >= totalRounds) {
+            endGame();
+            return;
+        }
+
+        currentRound++;
+        document.getElementById('round-display').innerText = currentRound;
+        updateProgressBar();
+
+        // 1. Vælg et tal mellem 1 og 20
+        targetNumber = Math.floor(Math.random() * 20) + 1;
+
+        // 2. Lav to falske tal
+        let options = [targetNumber];
+        while (options.length < 3) {
+            let r = Math.floor(Math.random() * 20) + 1;
+            if (!options.includes(r)) {
+                options.push(r);
+            }
+        }
+
+        // 3. Bland tallene
+        options.sort(() => Math.random() - 0.5);
+
+        // 4. Vis knapperne
+        const container = document.getElementById('choices-container');
+        container.innerHTML = '';
+        
+        options.forEach(num => {
+            const btn = document.createElement('div');
+            btn.className = 'number-card';
+            btn.innerText = num;
+            btn.onclick = (e) => handleGuess(num, e.target);
+            container.appendChild(btn);
+        });
+
+        // 5. Sig tallet (lidt forsinket så UI er klar)
+        setTimeout(speakCurrentNumber, 500);
+    }
+
+    // Håndter gæt
+    function handleGuess(number, element) {
+        totalClicks++;
+        
+        if (number === targetNumber) {
+            // Rigtigt svar
+            element.classList.add('pop');
+            correctClicks++;
+            
+            // Spil en lille "ding" lyd (valgfrit, men rart)
+            // Vi bruger bare visuel feedback her for enkelhedens skyld
+            
+            // Vent lidt før næste runde
+            setTimeout(nextRound, 1000);
+        } else {
+            // Forkert svar
+            wrongGuesses++;
+            element.classList.add('shake');
+            // Fjern shake class igen så den kan ryste igen ved næste klik
+            setTimeout(() => element.classList.remove('shake'), 500);
+        }
+    }
+
+    // Oplæsning (Text-to-Speech)
+    function speakCurrentNumber() {
+        // Stop hvis den allerede snakker
+        window.speechSynthesis.cancel();
+
+        const utterance = new SpeechSynthesisUtterance(targetNumber.toString());
+        utterance.lang = 'da-DK'; // Dansk sprog
+        utterance.rate = 0.9; // Lidt langsommere for børn
+        utterance.pitch = 1.1; // Lidt lysere stemme (venligere)
+        
+        window.speechSynthesis.speak(utterance);
+    }
+
+    // Opdater status bar
+    function updateProgressBar() {
+        const percent = ((currentRound - 1) / totalRounds) * 100;
+        document.getElementById('progress-bar').style.width = percent + "%";
+    }
+
+    // Spil slut
+    function endGame() {
+        clearInterval(timerInterval);
+        document.getElementById('game-area').style.display = 'none';
+        document.getElementById('end-screen').style.display = 'block';
+
+        // Beregn statistik
+        const accuracy = Math.round((correctClicks / totalClicks) * 100) || 0;
+        
+        document.getElementById('final-time').innerText = timerSeconds;
+        document.getElementById('final-wrongs').innerText = wrongGuesses;
+        document.getElementById('final-accuracy').innerText = accuracy;
+
+        // Gem score hvis det er rekord (færrest sekunder er bedst)
+        const currentBest = localStorage.getItem('mathGameBestTime');
+        if (!currentBest || timerSeconds < parseInt(currentBest)) {
+            localStorage.setItem('mathGameBestTime', timerSeconds);
+            alert("Ny Rekord! 🏆");
+        }
+
+        // Simpel konfetti effekt
+        startConfetti();
+    }
+
+    function startConfetti() {
+        const confettiEl = document.getElementById('confetti');
+        confettiEl.style.display = 'block';
+        
+        // Simpel CSS faldende emojis
+        let html = '';
+        for(let i=0; i<30; i++) {
+            const left = Math.random() * 100;
+            const animDuration = 2 + Math.random() * 3;
+            html += `<div style="position:absolute; left:${left}%; top:-10%; animation: fall ${animDuration}s linear infinite;">🎉</div>`;
+        }
+        confettiEl.innerHTML = html;
+        
+        // Tilføj keyframe via JS for at undgå rod
+        const style = document.createElement('style');
+        style.innerHTML = `@keyframes fall { to { top: 110%; transform: rotate(360deg); } }`;
+        document.head.appendChild(style);
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+[
+    {
+        "id": "id_0_taler_på_dansk",
+        "tekst": "Taler på dansk",
+        "start": 0.0,
+        "slut": 0.985
+    },
+    {
+        "id": "id_1_prøv_igen",
+        "tekst": "Prøv igen!",
+        "start": 2.436,
+        "slut": 2.991
+    },
+    {
+        "id": "id_2_næsten",
+        "tekst": "Næsten!",
+        "start": 4.461,
+        "slut": 5.171
+    },
+    {
+        "id": "id_3_flot",
+        "tekst": "Flot!",
+        "start": 6.591,
+        "slut": 7.075
+    },
+    {
+        "id": "id_4_rigtigt",
+        "tekst": "Rigtigt!",
+        "start": 8.507,
+        "slut": 9.017
+    },
+    {
+        "id": "id_5_godt_klaret",
+        "tekst": "Godt klaret!",
+        "start": 10.328,
+        "slut": 11.105
+    },
+    {
+        "id": "id_6_tjek_planen",
+        "tekst": "Tjek planen!",
+        "start": 12.523,
+        "slut": 13.553
+    },
+    {
+        "id": "id_7_fodr_løverne",
+        "tekst": "Fodr løverne!",
+        "start": 15.023,
+        "slut": 15.913
+    },
+    {
+        "id": "id_8_fodr_aberne",
+        "tekst": "Fodr aberne!",
+        "start": 17.386,
+        "slut": 18.285
+    },
+    {
+        "id": "id_9_fodr_elefanterne",
+        "tekst": "Fodr elefanterne!",
+        "start": 19.769,
+        "slut": 21.30
+    },
+    {
+        "id": "id_10_fodr_pingvinerne",
+        "tekst": "Fodr pingvinerne!",
+        "start": 22.45,
+        "slut": 23.94
+    },
+    {
+        "id": "id_11_fodr_pandaerne",
+        "tekst": "Fodr Pandaerne!",
+        "start": 24.30,
+        "slut": 25.64
+    },
+    {
+        "id": "id_12_fodr_girafferne",
+        "tekst": "Fodr Giraferne!",
+        "start": 25.80,
+        "slut": 27.00
+    },
+    {
+        "id": "id_13_fodr_kaninerne",
+        "tekst": "Fodr Kaninerne!",
+        "start": 27.20,
+        "slut": 28.50
+    }
+]

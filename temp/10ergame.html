@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>10'er Venner Spillet</title>
+    <style>
+        :root {
+            --primary: #4CAF50;
+            --secondary: #FF9800;
+            --bg: #f0f8ff;
+            --card-back: #2196F3;
+            --text: #333;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            touch-action: manipulation; /* Forbedrer touch på mobil */
+        }
+
+        header {
+            width: 100%;
+            padding: 10px;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            font-size: 1.2rem;
+            color: var(--text);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .stat-box {
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .stat-value {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+
+        #game-board {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            padding: 15px;
+            max-width: 600px;
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+        }
+
+        /* Kort Design */
+        .card {
+            background-color: transparent;
+            aspect-ratio: 3/4;
+            perspective: 1000px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 10px;
+        }
+
+        .card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card.matched .card-inner {
+            animation: pulse 0.5s ease-in-out;
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            font-weight: bold;
+            border: 2px solid white;
+        }
+
+        .card-back {
+            background: linear-gradient(45deg, var(--card-back), #64b5f6);
+            color: white;
+            font-size: 2rem;
+        }
+        
+        /* Mønster på bagsiden */
+        .card-back::after {
+            content: "?";
+            opacity: 0.5;
+        }
+
+        .card-front {
+            background-color: white;
+            color: var(--text);
+            transform: rotateY(180deg);
+            font-size: 2.5rem;
+            flex-direction: column;
+        }
+
+        .suit {
+            font-size: 1rem;
+            margin-top: 5px;
+        }
+
+        .red { color: #e53935; }
+        .black { color: #333; }
+
+        /* Start / Slut Skærm */
+        #overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255,255,255,0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        h1 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+            text-align: center;
+        }
+
+        p {
+            font-size: 1.2rem;
+            text-align: center;
+            max-width: 80%;
+            margin-bottom: 30px;
+        }
+
+        button {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #d87f00;
+            transition: transform 0.1s;
+            font-family: inherit;
+        }
+
+        button:active {
+            transform: translateY(4px);
+            box-shadow: none;
+        }
+
+        /* Animationer */
+        @keyframes pulse {
+            0% { transform: rotateY(180deg) scale(1); }
+            50% { transform: rotateY(180deg) scale(1.1); box-shadow: 0 0 15px gold; }
+            100% { transform: rotateY(180deg) scale(1); }
+        }
+
+        .hidden { display: none !important; }
+
+        /* Confetti lærred */
+        #confetti-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="stat-box">
+            <div class="stat-label">Tid</div>
+            <div class="stat-value" id="time">0:00</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-label">Bedste Tid</div>
+            <div class="stat-value" id="best-score">--:--</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-label">Par fundet</div>
+            <div class="stat-value"><span id="pairs-count">0</span>/10</div>
+        </div>
+    </header>
+
+    <div id="game-board">
+        </div>
+
+    <div id="overlay">
+        <h1 id="title-text">10'er Venner</h1>
+        <p id="info-text">Find de kort der giver 10 tilsammen!<br>(F.eks. 8 og 2)</p>
+        <button onclick="startGame()">Start Spil</button>
+    </div>
+
+    <canvas id="confetti-canvas"></canvas>
+
+    <script>
+        // Spillets variabler
+        const gameBoard = document.getElementById('game-board');
+        const timeDisplay = document.getElementById('time');
+        const bestScoreDisplay = document.getElementById('best-score');
+        const pairsCountDisplay = document.getElementById('pairs-count');
+        const overlay = document.getElementById('overlay');
+        const titleText = document.getElementById('title-text');
+        const infoText = document.getElementById('info-text');
+
+        let cards = [];
+        let flippedCards = [];
+        let matchedPairs = 0;
+        let timerInterval;
+        let startTime;
+        let isLocked = false;
+
+        // Hent bedste tid fra telefonens hukommelse
+        let bestTime = localStorage.getItem('venneSpilBestTime');
+        if (bestTime) {
+            bestScoreDisplay.textContent = formatTime(parseInt(bestTime));
+        }
+
+        // Definer 10-venner parrene (Vi laver 2 sæt for at få 20 kort i alt)
+        // Tallene er: 1,9, 2,8, 3,7, 4,6, 5,5
+        const basePairs = [
+            { v: 1, c: 'red', s: '♥' }, { v: 9, c: 'black', s: '♠' },
+            { v: 2, c: 'black', s: '♣' }, { v: 8, c: 'red', s: '♦' },
+            { v: 3, c: 'red', s: '♥' }, { v: 7, c: 'black', s: '♠' },
+            { v: 4, c: 'black', s: '♣' }, { v: 6, c: 'red', s: '♦' },
+            { v: 5, c: 'red', s: '♥' }, { v: 5, c: 'black', s: '♠' }
+        ];
+
+        function createDeck() {
+            // Vi duplikerer sættet for at få 20 kort (2 af hvert "par-sæt")
+            // Det betyder der er fx to 1-taller og to 9-taller i spillet.
+            let deck = [...basePairs, ...basePairs];
+            
+            // Vi tilføjer unikke ID'er så vi kan kende forskel
+            return deck.map((card, index) => ({ 
+                ...card, 
+                id: index,
+                // Lidt variation i farverne på sæt 2
+                c: index >= 10 ? (card.c === 'red' ? 'black' : 'red') : card.c,
+                s: index >= 10 ? (card.s === '♥' ? '♣' : '♦') : card.s
+            }));
+        }
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function formatTime(seconds) {
+            const m = Math.floor(seconds / 60);
+            const s = seconds % 60;
+            return `${m}:${s < 10 ? '0' : ''}${s}`;
+        }
+
+        function startGame() {
+            // Nulstil spil
+            matchedPairs = 0;
+            flippedCards = [];
+            isLocked = false;
+            pairsCountDisplay.textContent = matchedPairs;
+            overlay.classList.add('hidden');
+            gameBoard.innerHTML = '';
+            
+            // Start timer
+            startTime = Date.now();
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                const elapsed = Math.floor((Date.now() - startTime) / 1000);
+                timeDisplay.textContent = formatTime(elapsed);
+            }, 1000);
+
+            // Generer og bland kort
+            cards = shuffle(createDeck());
+            
+            // Byg HTML
+            cards.forEach(card => {
+                const cardEl = document.createElement('div');
+                cardEl.classList.add('card');
+                cardEl.dataset.value = card.v;
+                cardEl.dataset.id = card.id;
+
+                cardEl.innerHTML = `
+                    <div class="card-inner">
+                        <div class="card-front ${card.c}">
+                            <div>${card.v}</div>
+                            <div class="suit">${card.s}</div>
+                        </div>
+                        <div class="card-back"></div>
+                    </div>
+                `;
+
+                cardEl.addEventListener('click', () => flipCard(cardEl));
+                gameBoard.appendChild(cardEl);
+            });
+        }
+
+        function flipCard(cardEl) {
+            if (isLocked) return;
+            if (cardEl.classList.contains('flipped')) return; // Kan ikke vælge samme kort
+
+            cardEl.classList.add('flipped');
+            flippedCards.push(cardEl);
+
+            if (flippedCards.length === 2) {
+                checkForMatch();
+            }
+        }
+
+        function checkForMatch() {
+            const card1 = flippedCards[0];
+            const card2 = flippedCards[1];
+            const val1 = parseInt(card1.dataset.value);
+            const val2 = parseInt(card2.dataset.value);
+
+            // LOGIK: Tjek om summen er 10
+            if (val1 + val2 === 10) {
+                handleMatch(card1, card2);
+            } else {
+                unflipCards(card1, card2);
+            }
+        }
+
+        function handleMatch(c1, c2) {
+            isLocked = true; // Lås kortvarigt for at undgå hurtige klik fejl
+            setTimeout(() => {
+                c1.classList.add('matched');
+                c2.classList.add('matched');
+                matchedPairs++;
+                pairsCountDisplay.textContent = matchedPairs;
+                flippedCards = [];
+                isLocked = false;
+
+                if (matchedPairs === 10) {
+                    endGame();
+                }
+            }, 500);
+        }
+
+        function unflipCards(c1, c2) {
+            isLocked = true;
+            setTimeout(() => {
+                c1.classList.remove('flipped');
+                c2.classList.remove('flipped');
+                flippedCards = [];
+                isLocked = false;
+            }, 1000); // Vent 1 sek så barnet kan se fejlen
+        }
+
+        function endGame() {
+            clearInterval(timerInterval);
+            const finalTime = Math.floor((Date.now() - startTime) / 1000);
+            
+            // Tjek highscore
+            let isNewRecord = false;
+            if (!bestTime || finalTime < bestTime) {
+                bestTime = finalTime;
+                localStorage.setItem('venneSpilBestTime', bestTime);
+                bestScoreDisplay.textContent = formatTime(bestTime);
+                isNewRecord = true;
+            }
+
+            // Vis slutskærm
+            titleText.textContent = isNewRecord ? "Ny Rekord! 🎉" : "Flot klaret!";
+            infoText.innerHTML = `Du fandt alle 10'er vennerne på ${formatTime(finalTime)}.`;
+            overlay.classList.remove('hidden');
+            
+            fireConfetti();
+        }
+
+        // --- Simpel Konfetti Effekt ---
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        let confetti = [];
+        const confettiColors = ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107', '#FF9800', '#FF5722'];
+
+        function fireConfetti() {
+            confetti = [];
+            for (let i = 0; i < 100; i++) {
+                confetti.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    color: confettiColors[Math.floor(Math.random() * confettiColors.length)],
+                    size: Math.random() * 10 + 5,
+                    speed: Math.random() * 3 + 2,
+                    angle: Math.random() * 6.2
+                });
+            }
+            requestAnimationFrame(renderConfetti);
+        }
+
+        function renderConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            let active = false;
+            
+            confetti.forEach(p => {
+                p.y += p.speed;
+                p.x += Math.sin(p.angle) * 2;
+                p.angle += 0.1;
+                
+                if (p.y < canvas.height) active = true;
+
+                ctx.fillStyle = p.color;
+                ctx.fillRect(p.x, p.y, p.size, p.size);
+            });
+
+            if (active) requestAnimationFrame(renderConfetti);
+        }
+    </script>
+</body>
+</html>
