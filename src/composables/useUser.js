@@ -2,6 +2,19 @@ import { ref, watch, computed } from 'vue';
 
 const STORAGE_KEY = 'school_helper_user_data';
 
+const TITLES = [
+    'Superstjerne 🌟',
+    'Megasej 🚀',
+    'Talent 🏆',
+    'Geni 🧠',
+    'Vidunder 🌈',
+    'Mester ⭐',
+    'Legende 🥇',
+    'Raket ⚡',
+    'Solstråle ☀️',
+    'Energi-bundt 🏵️'
+];
+
 export function useUser() {
     const data = ref(loadData());
 
@@ -30,7 +43,12 @@ export function useUser() {
     const users = computed(() => data.value.users);
 
     const currentUser = computed(() => {
-        return data.value.users.find(u => u.id === data.value.lastActiveUserId) || null;
+        const user = data.value.users.find(u => u.id === data.value.lastActiveUserId);
+        if (user && !user.title) {
+            // Assign a title if missing (for older users)
+            user.title = TITLES[Math.floor(Math.random() * TITLES.length)];
+        }
+        return user || null;
     });
 
     function addUser(name, avatar = '👤') {
@@ -38,6 +56,7 @@ export function useUser() {
             id: crypto.randomUUID(),
             name,
             avatar,
+            title: TITLES[Math.floor(Math.random() * TITLES.length)],
             results: [],
             gameOrder: ['10er', 'getettal', 'hvilantal', 'balloon', 'toget', 'emojipuslespil', 'dyrefodring']
         };

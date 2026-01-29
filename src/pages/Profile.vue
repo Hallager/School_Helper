@@ -40,7 +40,7 @@
             <h2>{{ currentUser.name }}</h2>
             <button class="edit-name-btn" @click="startEditingName" aria-label="Ret navn">✎</button>
           </div>
-          <p>Super Elev 🌟</p>
+          <p>{{ currentUser.title }}</p>
         </div>
       </div>
 
